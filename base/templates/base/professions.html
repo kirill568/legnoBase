@@ -1,0 +1,75 @@
+{% extends 'base/basicTemplate.html' %}
+
+{% block title %}
+	{{ profession }}
+{% endblock %}
+
+{% block form %}
+	{% if request.user.is_authenticated and request.user.is_staff %}
+		<a href="{% url profession|add:'UpdateUrl' %}">обновить</a>
+	{% endif %}
+	<form action="{% url profession|add:'ListUrl' %}" method="get" class="searchForm">
+		<input type="text" name="search">
+		<label for="searchButton" class="searchButtonLabel"></label>
+		<input type="submit" name="searchButton" id= "searchButton" value="поиск">
+	</form>
+
+	<form action="{% url profession|add:'CreateUrl' %}" method="post" class="addForm">
+		{% csrf_token %}
+
+		{% for field in form %}
+			<div class="inputField">
+				{{ field }}
+				{% if field.errors %}
+					<div class="alert">
+						{{ field.errors }}
+					</div>
+				{% endif %}
+			</div>
+			<label for="addButton" class="addButtonLabel"></label>
+			<input type="submit" name="addButton" id = "addButton" value="добавить">
+			
+		{% endfor %}
+		
+	</form>
+{% endblock %}
+
+{% block content %}
+	<table>
+		{% if page_object %}
+			{% for name in page_object.object_list %}
+				<tr>
+					<td> {{ forloop.counter0|add:page_object.start_index }} </td>
+					<td> <a href="{{ 'https://www.instagram.com/'|add:name.name }}">{{name.name}}</a> </td>
+					{% if request.user.is_authenticated and request.user.is_staff %}
+						<td>
+							<form action="{% url profession|add:'DeleteUrl' name=name.name %}" method="post">
+								{% csrf_token %}
+								<button type="submit" name="button">Удалить</button>
+							</form>
+						</td>
+					{% endif %}
+				</tr>
+			{% endfor %}
+		{% else %}
+			<a href="{% url profession|add:'ListUrl' %}">Вернуться к списку</a>
+			<tr>
+				<td>Ничего не найдено</td>
+			</tr>
+		{% endif %}
+	</table>
+		{% if isPaginated %}
+			<div class="pagination">
+				<a class = "{% if not prevUrl %}disabled{% endif %}" href="{{ prevUrl }}">&laquo;</a>
+				
+				{% for n in page_object.paginator.page_range %}
+					{% if page_object.number == n %}
+						<a href="?page={{ n  }}" class="active">{{ n }}</a>
+					{% elif n > page_object.number|add:-3 and n < page_object.number|add:3 %}
+						<a href="?page={{ n  }}">{{ n }}</a>
+					{% endif %}
+				{% endfor %}
+				<a class = "{% if not nextUrl %}disabled{% endif %}" href="{{ nextUrl }}">&raquo;</a>
+			</div>
+		{% endif %}
+{% endblock %}

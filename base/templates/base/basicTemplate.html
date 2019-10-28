@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/profession.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Exo+2|Ubuntu&display=swap&subset=cyrillic" rel="stylesheet">
+	<title>
+		{% block title %}
+
+		{% endblock %}
+	</title>
+</head>
+<body>
+	<header>
+		<div class="container">
+			<div class="nav">
+				<a href="{% url 'designersListUrl' %}" class="designers">
+					Дизайнеры
+				</a>
+
+				<a href="{% url 'buildersListUrl' %}" class="builders">
+					Строители
+				</a>
+
+				<a href="{% url 'finishersListUrl' %}" class="finishers">
+					Отделочники
+				</a>
+			</div>
+		</div>
+	</header>
+
+	<section>
+		<div class="container">
+			<div class="tools">
+				{% block form %}
+	
+				{% endblock %}
+			</div>
+			<div class="list">
+				{% block content %}
+
+				{% endblock %}
+			</div>
+		</div>
+	</section>
+<script type="text/javascript" src="{% static 'script/underline.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Exo+2|Ubuntu&display=swap&subset=cyrillic" rel="stylesheet">
+	<title>
+		{{ title }}
+	</title>
+</head>
+<body>
+	<section>
+		<a href="{% url 'designersListUrl' %}">
+			<div>Дизайнеры</div>
+		</a>
+
+		<a href="{% url 'buildersListUrl' %}">
+			<div>Строители</div>
+		</a>
+
+		<a href="{% url 'finishersListUrl' %}">
+			<div>Отделочники</div>
+		</a>
+	</section>
+</body>
+</html>

@@ -14,6 +14,7 @@ class findEngine():
 		self.keyWordsActivity = keyWordsActivity
 		self.currentSortPeople = 0
 		self.currentScanPeople = 0
+		self.vpnProcess = None
 
 	def recursiveScan(self, startScan = 0):
 		for entry in self.entrys[startScan:]:
@@ -21,8 +22,9 @@ class findEngine():
 				self.scanPeoples(entry)
 				self.currentScanPeople += 1
 			except:
-				print('error')
-				# turned vpn
+				print('errorScan')
+				self.offVpn()
+				self.onVpn()
 				self.playScanPeoples()
 		return self.scaningPeoples
 
@@ -67,8 +69,9 @@ class findEngine():
 					self.sortingPeoples.append(people)
 				self.currentSortPeople += 1
 			except:
-				print('error')
-				#turned vpn
+				print('errorSort')
+				self.offVpn()
+				self.onVpn()
 				self.playSortPeoples()
 		return self.sortingPeoples
 
@@ -105,19 +108,22 @@ class findEngine():
 		with open(path, "a") as myfile:
 			myfile.write("\nscript-security 2\nup /etc/openvpn/update-resolv-conf\ndown /etc/openvpn/update-resolv-conf")
 			myfile.close()
-		process = subprocess.Popen(['sudo', 'openvpn', '--auth-nocache', '--config', path])
+		self.vpnProcess = subprocess.Popen(['sudo', 'openvpn', '--auth-nocache', '--config', path])
 		time.sleep(60)
 		with open("/home/kirill1/workspace/legnoBase/vpn/log.log", "r") as log:
 			if log.read().find('Initialization Sequence Completed') != -1:
 				os.chdir(currentDir)
-				return [process, True]
+				return True
 			else:
-				return [process, False]
-	def offVpn(self, process):
-		pidSubsidiary = process.pid + 1
-		process.kill()
-		os.kill(pid, signal.SIGKILL)
-		return
+				return False
+	def offVpn(self):
+		try:
+			pidSubsidiary = self.vpnProcess.pid + 1
+			self.vpnProcess.kill()
+			os.kill(pid, signal.SIGKILL)
+			return
+		except:
+			return
 
 
 

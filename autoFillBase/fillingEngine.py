@@ -1,5 +1,6 @@
 from instagram.agents import WebAgent, WebAgentAccount
 from instagram.entities import Account
+import requests, os, sys, subprocess, time, random, signal
 
 class findEngine():
 	def __init__(self, entrys, keyWordsTown, keyWordsActivity, agent = 'kirillbalaev', password = 'Rbhbkk_2001', getFollowers = False):
@@ -94,6 +95,30 @@ class findEngine():
 
 	def playScanPeoples(self):
 		return self.recursiveScan(startScan = self.currentScanPeople)
+
+	def onVpn(self, basePath = '/home/kirill1/workspace/legnoBase/vpn/'):
+		files = os.listdir(basePath + 'configFiles')
+		currentDir = os.getcwd()
+		os.chdir(basePath)
+		config = random.choice(files)
+		path = basePath + 'configFiles/' + config
+		with open(path, "a") as myfile:
+			myfile.write("\nscript-security 2\nup /etc/openvpn/update-resolv-conf\ndown /etc/openvpn/update-resolv-conf")
+			myfile.close()
+		process = subprocess.Popen(['sudo', 'openvpn', '--auth-nocache', '--config', path])
+		time.sleep(60)
+		with open("/home/kirill1/workspace/legnoBase/vpn/log.log", "r") as log:
+			if log.read().find('Initialization Sequence Completed') != -1:
+				os.chdir(currentDir)
+				return [process, True]
+			else:
+				return [process, False]
+	def offVpn(self, process):
+		pidSubsidiary = process.pid + 1
+		process.kill()
+		os.kill(pid, signal.SIGKILL)
+		return
+
 
 
 

@@ -220,8 +220,4 @@ def finishersUpdate(request):
 			Finishers.objects.create(name = finisher)
 		except:
 			print(finisher)
-	return(redirect('finishersListUrl')) 
-
-
-
-
+	return(redirect('finishersListUrl'))

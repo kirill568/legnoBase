@@ -3,7 +3,7 @@ from instagram.entities import Account
 import requests, os, sys, subprocess, time, random, signal
 
 class findEngine():
-	def __init__(self, entrys, keyWordsTown, keyWordsActivity, agent = 'kirillbalaev', password = 'Rbhbkk_2001', getFollowers = False):
+	def __init__(self, entrys, keyWordsTown, keyWordsActivity, agent = 'kirillbalaev', password = '###', getFollowers = False):
 		self.entrys = entrys
 		self.agent = agent
 		self.password = password
